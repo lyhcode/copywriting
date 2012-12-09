@@ -76,11 +76,7 @@ iReport 很貼心的，在他的安裝路徑內皆已經內置這兩個jar
 
 ![image](part1/classpath.png)
 
-接著點選頁面中的 add 按鈕，會跳出下列視窗
-
-![image](part1/itext_add.png)
-
-請將目錄移至````~/iReport-4.8.0/ireport/modules/ext````
+接著點選頁面中的 add 按鈕，將目錄移至````~/iReport-4.8.0/ireport/modules/ext````
 
 接著加入 __iText__ 以及 ___itext-asian.jar___ 如下圖
 

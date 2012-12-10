@@ -151,7 +151,7 @@ iReport 很貼心的，在他的安裝路徑內皆已經內置這兩個jar
 	
 接著下一步就完成我們的每天完成出貨的報表設定囉，是不是很簡單！
 
-![image](part1/ report_buildFin.png)
+![image](part1/report_buildFin.png)
 
 讓我們接著看看產生好的報表呈現的樣子，如下圖
 

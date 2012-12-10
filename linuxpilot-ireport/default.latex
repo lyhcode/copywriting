@@ -1,4 +1,4 @@
-\documentclass[$if(fontsize)$$fontsize$,$endif$]{$documentclass$}
+\documentclass[$if(fontsize)$$fontsize$,$endif$twocolumn]{$documentclass$}
 \usepackage[vmargin=$vmargin$,hmargin=$hmargin$]{geometry}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}

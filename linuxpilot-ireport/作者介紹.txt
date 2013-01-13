@@ -1,0 +1,2 @@
+1. 林彥宏（lyhcode.info），思創軟體創辦人，從事軟體設計顧問與技術寫作工作，熱衷於 Linux 與 Open Source 交流分享。
+2. 謝宗穎（smlsun），Java EE 與 iReport ... smlsun.com

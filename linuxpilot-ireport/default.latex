@@ -1,4 +1,5 @@
-\documentclass[$if(fontsize)$$fontsize$,$endif$twocolumn]{$documentclass$}
+\documentclass[$if(fontsize)$$fontsize$,$endif$b5paper]{$documentclass$}
+%\documentclass[$if(fontsize)$$fontsize$,$endif$twocolumn]{$documentclass$}
 \usepackage[vmargin=$vmargin$,hmargin=$hmargin$]{geometry}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}

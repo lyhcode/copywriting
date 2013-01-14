@@ -4,6 +4,24 @@
 
 ## Part 2 ##
 
+### 報表資料來源 ###
+
+iReport 支援的資料來源種類非常多，使用上相當有彈性。以下是幾種常見的資料來源類型：
+
+  * Database JDBC connection
+  * XML file datasource
+  * File CSV datasource
+  * Hibernate connection
+  * EJBQL connection
+  * Microsoft Excel (xls) data source
+  * Microsoft Excel 2007 (xlsx) data source
+  * Remote XML file datasource
+  * JSON datasource
+  * MongoDB Connection
+  * Hadoop Hive Connection
+
+多數常用的關聯式資料庫，例如 MySQL、PostgreSQL、SQL Server 或 Oracle 都可以找到 JDBC（Java Database Connectivity）驅動程式，在 iReport 中只要選擇「Database JDBC connection」就能以 SQL 建立查詢，將資料庫查詢結果用於報表內容顯示。
+
 ### 變更資料庫來源:使用CVS ###
 
 此章節將介紹如何使用CVS 作為資料庫來源

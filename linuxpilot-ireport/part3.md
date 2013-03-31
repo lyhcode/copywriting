@@ -1,186 +1,128 @@
+# 使用 iReport 5 免費開源軟體製作精美報表 #
 
-## 使用一維條碼
+電子報表在辦公室電腦化作業扮演重要的角色，由於需要合併處理數量龐大的資料，需要報表軟體才能省時不費力，例如 Crystal Report 與 Active Report 等都是知名的報表軟體。在全面採用自由軟體的工作環境中，我們使用開放源碼軟體 JasperReport 與 iReport 滿足報表需求。
 
-在使用報表時，很多時候我們需要條碼的協助，讓我們能夠更快得輸入或查詢資料，一方面可以避免輸入錯誤，在ireport裡就有內建barcode產生器可以很快速的產生條碼，只需要幾個步驟，再這為大家介紹。
+## Part 3 ##
 
-首先可以看到在ireport 的右邊工具列有個palette 的 report Elements 如下圖：
+### 報表使用圖片與條碼 ###
 
-![img](part2/barcode_1.png)
+在上一期我們已經分享如何使用 CSV 作為 iReport 報表的資料來源，本期將延續使用員工資料的範例，為讀者說明 iReport 的套印功能，包含在報表中使用圖片檔與一般維條碼。
 
-裡面有個 Barcode 的元件我們要使用他，只要將他拖拉到你預計需要顯示的地方，在拖拉完成之前我們可以看到他會提示詢問要用哪個套件產生barcode如下圖：
+相信 iReport 簡單易用的操作，您可以很快就成為辦公室裡的報表套印高手喔！
 
-![img](part2/barcode_2.png)
+### 建立新報表 ###
 
-根據，你想要產生的條碼形式，與encode的不同選擇所需要的套件，在這我們選擇 Barcode4j，可以看到選擇完成後在報表維護畫面就會有個條碼物件，接著我們就必須定義要用哪個欄位作為顯示的資料如下圖：
+關於建立新報表的流程，我們在前期已有詳細說明，所以不再提供詳細的操作畫面。
 
-![img](part2/barcode_3.png)
+使用主選單的「檔案 / New」建立新報表，本次使用「Blank A4」這個空白的範本，作為新報表的基礎，在資料來源的地方，仍使用我們在上一期已經建立「Employe」資料來源，這是一個自訂的 CSV 資料來源，從「employe.txt」文字檔取得所需的員工資料。
 
-當我們點選barcode物件時，可以在編輯畫面右下角的屬性看到__Code Expression__，在該欄位可以是靜態資料也可以是動態欄位，在此我們填入 ``$F{ORDERID}`` 也就是根據訂單編號來產生條碼，每一比資料都會產生不同的條碼，最後產生的結果如下：
+員工資料（employe.txt）是 CSV 格式的純文字檔案，內容範例如下：
 
-![img](part2/barcode_4.png)
+    員工編號,姓名,性別,職稱,分機號碼
+    A01,陳小莉,女,經理,5301
+    A02,王大明,男,專案經理,5302
+    A03,張大仟,男,工程師,5303
+    A04,李曉龍,女,工程師,5304
+    A05,吳明世,男,行政助理,5305
 
-如此就完成條碼的產生，可以看到每個條碼，都根據ORDERID動態產生，就是如此的方便，除了二維條碼之外，如果要產生QR CODE 也是可以的，必須要額外使用QR CODE 產生器的套件。
+本次的範例是製作員工識別證，因此我們只需要留下報表中 Detail 這個區塊。首先將其他不必用到的區塊刪除，避免產生的報表有太多空白的地方。新建的報表首先需要刪除「Title、Page Header、Column Header、Column Footer、Page Footer、Summary」等區塊，刪除區塊的方法，是在左側 Report Inspector 中選取區塊名稱（例如 Page Header），再點選滑鼠右鍵選單的「Delete Band」將區塊移除。
 
+移除不必要的區塊後，再用滑鼠將「Detail」區塊的高度增加到適當的大小，這個區塊將用來放置識別證的員工資料。
 
-## 加入圖檔
+![新報表編輯畫面](part3/part3-report1.png)
 
-為大家介紹如何加入圖檔的顯示，一般來說，除了文字資料，若有圖片作為輔助，將更能協助報表內資料的辨識，在ireport，裡也有圖片元件可以使用，首先我們可以點選左邊palette 的 report Elements 裡的image，如下圖：
+在 iReport 報表編輯畫面的右方，調色板（Palette）提供報表設計所需的各種元件，我們先用以下兩種元件輸出員工資料。
 
-![img](part2/image_1.png)
+1. Static Text
+2. Text Field
 
-同樣的我們可以用拖拉的方式將該元件放到報表中，他可以是靜態資料也可以是動態的資料，靜態的部份就勢將你要顯示的圖檔路徑給定，那ireport就會根據你指定的圖檔做顯示，如果是動態的就必須有個規則，比如說我們同樣的用ORDERID當做動態給定圖檔的檔名設定方式如下圖：
+上述兩種元件都是用來顯示文字資料，差別是 Text Field 可以從資料來源動態讀取指定的欄位資料，並可以透過內建的函數進行額外的處理。
 
-![img](part2/image_2.png)
+首先分別使用三個 Text Field 元件來放置姓名、職稱及分機號碼，將 Text Field 從調色板拖曳到報表適當的位置，並從報表上方的設定選項調整字型大小；將這些 Text Field 的內容，依照資料來源的欄位名稱作修改，例如：
 
-可以看到我們將 __Image Expression__ 設定為 ``"/home/spooky/ $"+$F{ORDERID}+".jpg"`` ，我們只要在指定的路徑放根據ORDERID編號命名圖檔檔名，ireport就會自動將圖檔載入，另外也許並不是每比資料都有對應的圖檔，故我們可以調整 ``On Error Type`` 如下圖：
+* $F{姓名}
+* $F{職稱}
+* $F{分機號碼} 
 
-![img](part2/image_3.png)
+這是 iReport 報表從資料來源讀取指定欄位的語法，格式為：``$F{欄位名稱}``。
 
-原本為 ``Error``，也就是說如果找不到圖檔報表就不會產生，這不是我們要的，因為實際上圖片的完善是需要一些時間，我們將其改為``blank`` 也就是說如果找不到圖片請ireport顯示空白，OK，設定完之後，我們來看結果，如下圖：
+使用 Static Text 放置一般文字資料，例如我們需要直接印出「分機號碼」。
 
-![img](part2/image_4.png)
+將報表內容調整成適當的大小，並拖曳元件到適當位置，第一階段的報表內容就已經完成了。
 
+![編輯報表內容](part3/part3-report2.png)
 
-設定好之後，一旦我們有訂單有需要在增或是調整圖片內容，我們只要替換圖檔就好，ireport就會自動將圖片顯示出來，是不是很簡單阿！
+點選預覽（Preview）按鈕，可以看到
 
+![預覽目前的報表](part3/part3-report3.png)
 
+### 使用一維條碼 ###
 
+在報表中使用一維條碼（Barcode），是個相當常見的報表設計方式，透過條碼掃瞄器的協助，可以減少人工輸入資料較費時又容易發生錯誤的麻煩。很幸運的 iReport 內建多種條碼格式，只需要幾個步驟，就能夠在報表中加入條碼。
 
+調色板（Palette）提供「Barcode」元件，用滑鼠點選後拖曳到報表。
 
-##地圖元件
+![Barcode 元件](part3/part3-barcode1.png)
 
-地圖元件，就在11月底的時候 ireport 釋出 ５.0.0 的新功能，這邊介紹一下如何使用該元件，圖資來源就是google，首先同樣的在左邊palette 的 report Elements可以看到有個Map 元件，如下圖：
+新增 Barcode 元件需要選擇條碼格式，iReport 使用兩套不同的 Java 函式庫提供條碼產生功能，分別是 Barbecue 與 Barcode4J，報表設計者可以依照需求選擇合適的條碼格式，在挑選條碼格式時必須考慮：
 
-![img](part2/map_1.png)
+1. 所使用的條碼掃瞄器是否支援此種格式
+2. 原始資料是否為純數字或包含英文字母
 
-把它拖拉到你想要放置地圖的地方，接著你需要知道你要插入地圖的位置的座標，可以利用google map把你想查的點查出來後取得座標，查出來以後我們將座標資訊輸入如下圖：
+此範例使用員工編號產生條碼，因為是以一個大寫英文字母為首，所以選擇 Barcode4j 支援英文字母的「Code39」條碼格式。
 
-![img](part2/map_2.png)
+![選擇條碼格式](part3/part3-barcode2.png)
 
-可以看到他有兩個參數分別是 ``Lat. Expr`` ``Lon. Expr``，也就是經緯座標的輸入，然後我們可以看到下面還有個``Zoom. Expr`` 也就是縮放比例，這個也必須設置，不然地圖細節看不到，也就沒意義了，這邊將其設置為15，最後還有個``Language``的屬性，根據你的地圖所需要顯示語系做設置，這邊設定為 ``"zh-TW"``，OK，如此一來我們就可以看結果了，如下圖： 
+新增 Barcode 元件後，先用滑鼠選取元件，再到右側的屬性視窗，修改「Code Expression」屬性內容為「$F{員工編號}」。
 
+![修改條碼屬性設定](part3/part3-barcode3.png)
 
-![img](part2/map_3.png)
+將 Barcode 元件拖曳到適當的顯示位置。
 
-當然可以在搭配資料庫動態顯示地圖，比如說如範例報表可以顯示每個出貨地點的地圖，只要在欄位定義多個經緯度，如此就可以根據欄位作為資料來源，顯示每個出貨地點的地理資訊，如此一來，地圖呈現將會更加便利。
+![報表中的條碼](part3/part3-barcode4.png)
 
+使用預覽功能，查看報表中的條碼顯示結果。如果條碼的設定不正確，例如選擇使用不支援英文字母的條碼格式來顯示員工編號，就會顯示錯誤訊息而無法順利預覽。
 
+![預覽報表的條碼](part3/part3-barcode5.png)
 
-##QR CODE 的產生
+如此一來，我們製作好的員工識別證，就可以利用條碼掃瞄器讀取員工編號。
 
-開始說明如何使用ireport 產生QRCODE 之前，需要先說明，此為進階功能，讀者必須做一點程式開發，並且必須要有JAVA的開發環境，筆者為了簡化開發JAVA所需的引入套件，編譯以及包jar將使用 ``gradle`` 來做為 build script，可以把它想像成ant 的強化版，在這邊就不進一步敘述，重點還是放在產生QRCODE的所需步驟，透過這章節也將可以了解ireport 除了一些方便的報表製作的元件外，透過其內建的Scriptlet 可以方便的引入外部程式進行資料運算與處理，那我們就開始吧！
+## 使用圖片檔 ###
 
-首先先簡單的說明一下要產生QRCODE的步驟：
+除了顯示文字和條碼，iReport 也提供圖片元件，可以方便地將磁碟上的圖片檔案，加入報表中顯示。
 
-1. 因為ireport並沒有內建的QRCODE generater，因次若要產生QRCODE我們需要使用外部套件，協助將資料進行轉換
-2. 為了要能夠讓ireport的資料能夠交由別的程式進行處理，我們需要使用到ireport提供的scriptlet作為插件引入，自行定義的程式
-3. 最後必須將處理結果，傳回ireport進行顯示，我們將透過ireport的變數物件``Variable``作為處理結果的容器，並且顯示在報表上面，步驟清楚了，再來就開始實作部分，首先必須先把相依套件準備好。
+首先我們幫每位員工製作好一張個人的相片，並將圖片檔依照員工編號命名，並存放在指定資料夾中，例如：
 
-### 所需套件名稱與對應版本
+* /home/demo/report1/A01.png
+* /home/demo/report1/A02.png
+* …依此類推
 
-下面是gradle所定義的套件相依性的程式碼：
+從調色板選取 Image 元件，並拖曳到報表中。
 
-	apply plugin: 'java'
+![圖片元件](part3/part3-image1.png)
 
-	repositories {
-    	mavenCentral()
-	}
-	dependencies {
-    	compile group: 'com.google.zxing', name: 'javase', version: '2.1'
-    	compile group: 'net.sf.jasperreports', name: 'jasperreports', version: '5.0.0'
-    	compile group: 'com.lowagie', name:'itext', version:'2.1.7'
-	}
+先選取一個圖片檔，才能順利新增 Image 元見到報表。
 
-其中各個套件使用目的如下：
+![圖片元件](part3/part3-image2.png)
 
-* jasperreports: ireport的core，凡是需要實作ireport的相關功能都需要使用到此套件，為了產生QRCODE我們需要使用到ireport 的scriptlet，故我們必須 extends JRDefaultScriptlet，後續會在詳細說明
-* itext: jasperreports在使用時需要用到itext套件，故必須引入
-* zxing: 是google 的開源套件，就是要用來產生QRCODE image的
+我們希望每張識別證的圖片檔案名稱，都是藉由資料來源的「員工編號」動態產生，所以需要修改 Image 元件的右方屬性設定，將屬性「Image Expression」內容修改成：
 
-一旦相依套件準備好了我們就可以開始進行程式的開發。
+    "/home/demo/report1/"+$F{員工編號}+".png"
 
-### 製作Scriptlet產生QRCODE
+屬性名稱包含 Expression 的欄位，在 iReport 可以支援簡易的程式語法，在這個例子中，我們將資料來源讀取到的欄位內容，加上圖片檔案存放的路徑與副檔名（.png）組合成一個完整的圖片絕對路徑。
 
-程式碼如下：
+![圖片元件](part3/part3-image3.png)
 
-	package com.smlsun.ireport;
-	import com.google.zxing.BarcodeFormat;
-	import com.google.zxing.WriterException;
-	import com.google.zxing.common.BitMatrix;
-	import com.google.zxing.qrcode.QRCodeWriter;
-	import com.google.zxing.client.j2se.MatrixToImageWriter;
-	import net.sf.jasperreports.engine.JRDefaultScriptlet;
-	import net.sf.jasperreports.engine.JRScriptletException;
+修改屬性設定後，在報表編輯畫面中無法顯示圖片，這是因為圖片檔案路徑在編輯階段尚未產生。
 
-	public class QRCodeScriptlet extends JRDefaultScriptlet {
-	    public void afterDetailEval() throws JRScriptletException {
-	        QRCodeWriter writer = new QRCodeWriter();
-	        BitMatrix matrix = null;
+![圖片元件](part3/part3-image4.png)
 
-	        try {
-	            matrix = writer.encode(getFieldValue("ORDERID").toString(), BarcodeFormat.QR_CODE, 256, 256);
-	            this.setVariableValue("BarCodeImage", MatrixToImageWriter.toBufferedImage(matrix) );
-	        } catch (WriterException e) {
-	            e.printStackTrace();
-	        }
-	    }
-	}
-	
-上述得程式中我們可以看到class extends JRDefaultScriptlet 並且實作了 ``afterDetailEval()``這個void ，也就是說當Detail band 報表展開完成後，將開觸動此void
+使用預覽報表功能，可以看到每張員工識別證，分別依照員工編號顯示個人的相片。
 
-接著可以看到在程式中 ``QRCodeWriter writer = new QRCodeWriter();``就是用來產生QRCODE 的物件，接著 ``BitMatrix matrix``將承接 ``QRCodeWriter``產生後的資料，然後在透過 ``MatrixToImageWriter``將 ``BitMatrix``所承接的資料轉換為 Image。
+![圖片元件](part3/part3-image5.png)
 
-其中資料來源將透過``getFieldValue("ORDERID")`` 取得報表中從Data Source取得的欄位內容進行轉換，並且將轉換好的圖片檔塞入變數``BarCodeImage``，透過 `` this.setVariableValue("BarCodeImage", BufferedImage)``
+### 善用報表工具提昇辦公室效率 ###
 
-如此一來最難的JAVA程式就算完成了，接著我們必須將他打包成jar檔，在此筆者的jar檔檔名為``ireprt-qrcode.jar``，引入ireport的classpath，並且別忘了相依的套件也必須一併引入才行，連同``zxing``，``jasperreports``還有``itext``，結果如下圖：
+iReport 是相當容易學習的報表工具，不但免費而且功能十分強大，只要學會基本的報表製作技巧，即使完全不會寫程式，也能利用簡易的資料檔（例如 CSV 或 Excel 等），製作出美觀實用的報表。
 
-
-![img](part2/qrcode_1.png)
-
-
-就算完成產生QRCODE的Scriptlet並且載入ireport接著下一步驟。
-
-### ireport 綁定 Scriptlet
-
-首先我們必須將剛剛完成並切引入ireport的jar註冊到scriptlet，我們可以在左邊的 report inspector，看到有個Scriptlets，將其打開並且點選底下的REPORT，如下圖
-
-![img](part2/qrcode_2.png)
-
-要定義載入的class，可以看到右邊的REPORT - Properties，下面有個Scriptlet Class，如下圖
-
-![img](part2/qrcode_3.png)
-
-鍵入剛剛完成的class package 路徑 ``com.smlsun.ireport.QRCodeScriptlet``，OK～如此一來就算將我們寫的scriptlets註冊到ireport了！
-
-### 建立 BarCodeImage  Viariable 
-
-
-然後我們必須創建一個變數``Viariables``，作為scriplet處理結果的容器，也因此我們需要建立一個這樣的變數，操作方式如下圖：
-
-![img](part2/qrcode_4.png)
-
-在 Viariables 上面用滑鼠右鍵，點選Add Variable，在Viariables下面將多一個 variable1，需要在定義他的 Properties，如下圖：
-
-![img](part2/qrcode_5.png)
-
-在剛剛的程式碼中我們將承接變數的名稱命名將Name 改為``BarCodeImage``
-
-還記得剛剛得程式中我們需將scriptlet處理結果置於 BarCodeImage這個variable，因為最後產生的QRCODE是圖片的形式所以需指定型態為``BufferedImage``，所以需將 Variable Class 更改為``java.awt.image.BufferedImage``，需特別提醒，下拉選單是挑不到的，請直接鍵入，並且記得大小寫必須一致。
-
-最後我們必須將``Calculation``設定為 ``System``，也就是告訴ireport此變數執行的運算的是系統定義，其他還有很多不同的運算式像是``Count`` ``Sum`` ``Average``等，在這邊不細談。
-
-### 使用 ireport image Element 顯示QRCODE
-
-就快完成了！剩下最後一哩，我們需要之前有說明過的image Element作為做後呈現的媒介，同樣我們將image拖拉到我們需要呈現QCODE的位置，編輯該元件的Properties，如下圖
-
-![img](part2/qrcode_6.png)
-
-在Image Expression裡我們需要填入剛剛建立並且設定好的 ``$V{BarCodeImage}``，前置詞``$V``代表為 Viariable，表示image元件呈現內容的來源為``$V{BarCodeImage}``，而``$V{BarCodeImage}``將會承接 ``QRCodeScriptlet``處理結果，整個運作路徑就清楚了，最後就可以來看運作結果了，如下圖：
-
-![img](part2/qrcode_7.png)
-
-
-QRCODE產生完成！透過實作產生QRCODE將更了解ireport的運作，可以有更多延伸，比如說第三方的圖表呈現，或者引入html 都可以很方便做到，透過Scriptlet也可以簡化報表製作的複雜度，有些運算在ireport內很難設定，但用程式處理也許就有現成的程式碼可以使用，像QRCODE就是一個很好的例子。
-
-
-
+比起一般文書處理的批次套印功能，iReport 是專業級的報表製作工具，可以將大量的資料依照精確的排版格式套印輸出，製作好的報表可以重複利用，不管製作郵寄信封、識別標籤或列印支票，都可以輕鬆上手。

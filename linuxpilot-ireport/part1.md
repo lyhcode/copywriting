@@ -4,7 +4,7 @@
 
 ## Part 1 ##
 
-### 認識 JasperReport 與 iReport ###
+### 認識 JasperReport 與 iReport 報表工具 ###
 
 JasperReport 是 Jaspersoft 公司的產品，它是一個開放源碼的報表引擎（Report Engine），完全使用 Java 開發，可以產生高品質的報表文件，支援的輸出格式包括 HTML、PDF、CSV、OpenOffice、Word 或 EXCEL 等。
 
@@ -19,7 +19,7 @@ JapserReport 與 iReport 在全球有相當高的使用率，只可惜目前缺�
 報表處理流程：[iReport] 儲存 -> .jrxml -> [JasperReport] 編譯 -> .jasper 報表輸出 -> HTML, PDF, XLS, …
 
 
-### 安裝 Java 環境 ###
+### 安裝 Java 執行環境 ###
 
 建議讀者安裝最新的 Java 7 發行版，可以在 Oracle 網站下載取得安裝程式。
 

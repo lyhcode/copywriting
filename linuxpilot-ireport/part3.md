@@ -101,7 +101,7 @@
 
 ![圖片元件](part3/part3-image1.png)
 
-先選取一個圖片檔，才能順利新增 Image 元見到報表。
+先選取一個圖片檔，才能順利新增 Image 元件到報表。
 
 ![圖片元件](part3/part3-image2.png)
 

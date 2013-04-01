@@ -10,7 +10,7 @@ JasperReport 是 Jaspersoft 公司的產品，它是一個開放源碼的報表�
 
 對軟體開發者來說，Jasper Report 是一組 Java 報表函式庫（Reporting Libaries），它用於將定義報表的 XML 原始檔（.jrxml），轉換成已編譯檔（.jasper）；編譯好的報表檔可以搭配其他應用程式如 Java Swing 或 JSP / Servlet 加上外部資料來源以輸出成可視報表。JasperReport 雖然免費但功能一點也不輸給商業軟體，它可以靈活、有彈性的存取多種資料來源，例如資料庫（Database）、CSV 文字檔、XML、JavaBean 等，都可以作為報表的來源資料。
 
-只要搭配 Java EE Container 如 Tomcat 或 Jetty，透過 Web Services 等方式存取，Jasper Report 也能和 Java 以外的開發平台一起運作，讓其他 .NET、PHP 或 Ruby 開發的應用程式，也能享有 JasperReport 強大的報表功能。
+只要搭配 Java EE Container 如 Tomcat 或 Jetty，透過 Web Services 等方式存取，Jasper Report 也能和 Java 以外的開發平台一起運作，讓其他 .NET、PHP 或 Ruby 開發的應用程式也能享有 JasperReport 強大的報表功能。
 
 iReport Designer 則是專為 JasperReport 開發所視即所得報表設計工具，在操作上擁有友善的視覺化圖形介面，是一個讓初學者相當容易入門好上手的軟體。
 

@@ -1,0 +1,1 @@
+林彥宏（lyhcode.info）與謝宗穎（smlsun.com），自由軟體與開放原始碼愛好者，共同創業並從事 Java、Grails、Ext JS 與 Linux 技術寫作、顧問與教學工作。

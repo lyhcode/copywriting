@@ -1,0 +1,126 @@
+# 讓網頁 script 標籤支援更多程式語言 #
+
+如果讀者也經歷過 GeoCities 年代，對於 ```<script>``` 標籤中指定 VBScript 的用法，相信不會感到陌生。
+
+    <script type="text/vbscript" language="vbscript">
+    MsgBox "Hello World"
+    </script>
+
+雖然我們知道 ```<script>``` 可以支援多種程式語言，但發展迄今只有 JavaScript（ECMAScript）可以一統瀏覽器江湖，成為跨瀏覽器實作的唯一選擇。所以在不指定語言類型的情況下：
+
+	<script>alert('Hello World');</script>
+
+上述的範例，正常的瀏覽器都會以 JavaScript 預設執行。儘管省略指定 type 的屬性，仍然可以正常執行，不過為了追求卓越的代碼，身為盡責的程式設計師，我們仍然堅持要指定 ```type="text/javascript"``` 才行。
+
+	<script type="text/javascript">alert('Hello World');</script>
+
+這是否意味著 ```<script>``` 就這樣被 JavaScript 獨佔了呢？
+
+在 Server 端執行的後端程式，指定其他語言類型的 ```<script>``` 標籤，這種用法比較常見，畢竟後端可以先處理完，再輸出成瀏覽器支援的語法。我們可以在 ASP.NET 看到加上 ```runat="server"``` 的屬性，標示此段代碼是在 Server 端執行。
+
+	<script type="text/vbscript" language="vbscript" runat="server"> 
+
+雖然瀏覽器共同的標準僅有 JavaScript 一種；但是在 JavaScript Engine 愈來愈強大快速後，利用「JavaScript」發展其他語言的 Interpreter 帶來更多可能。
+
+例如 qb.js 示範了一個 QuickBasic 的經典「Nibbles（貪食蛇）」遊戲範例，就是利用 Modern Browser 支援的 HTML5 Canvas 標籤與 JavaScript 實作。
+
+* qb.js: An implementation of QBASIC in Javascript（http://stevehanov.ca/blog/index.php?id=92）
+
+利用瀏覽器 JavaScript 實作其他語言的 REPL（Read–eval–print loop）直譯器，可以在 repl.it 網站找到許多範例，包含 Ruby、Python 與 Lua 等。
+
+* repl.it（http://repl.it/languages）
+
+有了其他語言利用瀏覽器 JavaScript 實作的直譯器，在 ```<script>``` 標籤中指定語言類型，就有新的用途出現。
+
+值得參考的應用來自 Processing.js 的範例，Processing 是用於互動式圖形程式設計的語言，而 Processing.js 將 Processing 利用 JavaScript 實作移植到瀏覽器中執行，因此一段 Processing 的程式碼，可以直接嵌在網頁中，利用 type="application/processing" 指定由 Processing.js 引擎執行，並指定將其結果呈現在一個 Canvas 區塊中顯示。
+
+	<script src="processing-1.3.6.min.js"></script>
+	<script type="application/processing" data-processing-target="pjs">
+	void setup() {
+	    size(200, 200);
+	    background(100);
+	    stroke(255);
+	    ellipse(50, 50, 25, 25);
+	    println('hello web!');
+	}
+	</script>
+	<canvas id="pjs"> </canvas>
+
+這是如何做到的呢？
+
+最困難的部份其實在於直譯程式的實作，幸好許多語言已經有 JavaScript 實作的版本，我們可以直接加以利用。而將這些語言的程式碼內嵌到網頁中，則只要簡單的 Hack 即可做到。
+
+接下來我們以 BiwaScheme 為例，這是一個 JavaScript 版本的 Scheme RSR6 開源實作。以下將說明如何動手改寫 JS 函式庫，讓網頁 HTML 內嵌的 Scheme 程式碼可以直接被直譯後，將結果顯示在網頁畫面上。
+
+* BiwaScheme（http://www.biwascheme.org/）
+
+在 BiwaScheme 官方提供的範例中，一段網頁內嵌的 Scheme 程式碼，其寫法如下：
+
+	<script src="biwascheme.js">
+	(display "hello, world!")
+	</script>
+	<div id="bs-console"></div>
+
+上面的範例雖然可執行，但沒有達到我們理想的目標，也就是讓 ```<script>``` 支援程式語言類型的設定。我們希望能支援像以下的寫法：
+
+	<script src="biwascheme.js"></script>
+	<script type="text/x-scheme">
+	(display "hello, world!")
+	</script>
+	<div id="bs-console"></div>
+
+為了能夠找出網頁中使用的 ```<script>``` 標籤，需要改寫 BiwaScheme 的 release_initializer.js 程式碼。
+
+* src/platforms/browser/release_initializer.js
+
+改寫後的範例如下：
+
+    // Start user's program
+    var script = $("script[src$='biwascheme.js']").html() ||
+                 $("script[src$='biwascheme.min.js']").html();
+
+    if (!script) {
+      var i, nodes = document.getElementsByTagName('script');
+      for (i = nodes.length - 1; i >= 0; i--) {
+        if (nodes[i].getAttribute) {
+          var node = nodes[i];
+          var type = node.getAttribute('type');
+          if (type && type.toLowerCase() === 'text/x-scheme') {
+            script = node.textContent || node.text || node.innerText;
+          }
+        }
+      }
+    }
+
+儘管 BiwaScheme 已經使用 jQuery 函式庫，但這段程式中不難發現，我們仍大費周章使用較低階的 JavaScript 語法，而不是使用更簡潔的 jQuery 版本。實際上在這部份的處理，jQuery 並無法派上用場，也就是我們並沒辦法這樣簡化：
+
+	$('script[type="text/x-scheme"]').text();
+
+確實 jQuery 在許多時候很好用；但遇到它不靈光的時候，還是需要搬出 JavaScript 的基本功夫。
+
+上面的程式碼片段，已經將 ```<script>``` 的原始文字內容取出，接下來就可以丟給 BiwaScheme 的 Interpreter 進行處理。
+
+    if (script) {
+      var intp = new BiwaScheme.Interpreter(onError);
+      try{
+        intp.evaluate(script, function(){});
+      }
+      catch(e){
+        onError(e);
+      }
+    }
+
+經過修改後的 BiwaScheme，就可以支援在網頁中內嵌的 Scheme 程式碼，看起來更接近我們希望呈現的樣貌。
+
+    <script type="text/x-scheme">
+    (define atom?
+        (lambda (x)
+        (and (not (pair? x)) (not (null? x)))))
+    (display (atom? 'a))
+    </script>
+
+網頁可以內嵌不同程式語言，可以有哪些應用呢？這就留給聰明的讀者自由想像發揮啦！
+
+我們修改過的 BiwaScheme 專案，也同樣以開放源碼方式釋出（https://github.com/codecanaan/biwascheme）。
+
+＠作者 lyhcode 目前從事程式設計教學與顧問工作。（http://lyhcode.info/）
